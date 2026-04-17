@@ -18,7 +18,7 @@ const VESSELS = [
   { id: "glass",   label: "Glass",   ml: 250,  icon: "cup",         bg: "#d8e2ff", iconColor: "#0058bf" },
   { id: "bottle",  label: "Bottle",  ml: 500,  icon: "bottle-soda", bg: "#5af8fb", iconColor: "#004f51" },
   { id: "mug",     label: "Mug",     ml: 350,  icon: "coffee",      bg: "#e6e8ea", iconColor: "#414755" },
-  { id: "thermos", label: "Thermos", ml: 750,  icon: "thermos",     bg: "#e0e0ff", iconColor: "#4f54a3" },
+  { id: "thermos", label: "Thermos", ml: 750,  icon: "shaker",     bg: "#e0e0ff", iconColor: "#4f54a3" },
 ] as const;
 
 function formatTime(isoString: string) {
