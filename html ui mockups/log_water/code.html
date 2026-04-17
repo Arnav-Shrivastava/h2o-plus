@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Log Hydration - H2O+</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#4f54a3",
+                    "on-primary-container": "#fefcff",
+                    "surface-container-low": "#f2f4f6",
+                    "primary-fixed-dim": "#aec6ff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#2ddbde",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-dim": "#d8dadc",
+                    "on-tertiary-fixed": "#070a61",
+                    "on-primary-fixed-variant": "#004396",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "background": "#f7f9fb",
+                    "secondary-fixed": "#5af8fb",
+                    "on-tertiary-fixed-variant": "#393e8c",
+                    "on-secondary-fixed": "#002020",
+                    "tertiary-fixed": "#e0e0ff",
+                    "on-secondary-container": "#006e70",
+                    "on-surface-variant": "#414755",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#d8e2ff",
+                    "primary": "#0058bf",
+                    "secondary": "#00696b",
+                    "primary-container": "#006fef",
+                    "inverse-primary": "#aec6ff",
+                    "on-error-container": "#93000a",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#eceef0",
+                    "surface-bright": "#f7f9fb",
+                    "on-surface": "#191c1e",
+                    "on-secondary-fixed-variant": "#004f51",
+                    "surface-container-high": "#e6e8ea",
+                    "surface": "#f7f9fb",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#2d3133",
+                    "on-background": "#191c1e",
+                    "outline": "#727786",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-secondary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "secondary-container": "#56f5f8",
+                    "outline-variant": "#c1c6d7",
+                    "tertiary-container": "#686dbe",
+                    "tertiary-fixed-dim": "#bfc2ff",
+                    "on-primary-fixed": "#001a42",
+                    "on-tertiary-container": "#fffbff",
+                    "surface-tint": "#005ac4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-glass {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .signature-gradient {
+            background: linear-gradient(135deg, #0058bf 0%, #006fef 100%);
+        }
+        .hydration-wave {
+            mask-image: url("data:image/svg+xml,%3Csvg width='400' height='200' viewBox='0 0 400 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 C 100 0, 150 100, 250 50 S 400 100, 400 100 L 400 200 L 0 200 Z' fill='black'/%3E%3C/svg%3E");
+            mask-size: cover;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface antialiased min-h-screen pb-32">
+<!-- TopAppBar Shell -->
+<nav class="fixed top-0 w-full z-50 bg-[#f7f9fb]/70 backdrop-blur-xl flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600 text-2xl" data-icon="waves">waves</span>
+<span class="text-2xl font-black bg-gradient-to-r from-blue-700 to-cyan-500 bg-clip-text text-transparent font-headline tracking-tight">H2O+</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-on-surface" data-icon="close">close</span>
+</button>
+</nav>
+<main class="pt-24 px-6 md:px-12 max-w-5xl mx-auto">
+<!-- Hero Header -->
+<header class="mb-12">
+<h1 class="font-headline font-extrabold text-4xl md:text-6xl text-on-surface tracking-tight mb-4">Log Water</h1>
+<p class="text-on-surface-variant text-lg max-w-md">Stay in your flow. Choose a vessel or enter a custom amount to record your hydration.</p>
+</header>
+<!-- Bento Grid for Quick Entry -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+<!-- Glass Container Card -->
+<div class="md:col-span-1 bg-surface-container-lowest p-8 rounded-lg flex flex-col items-center justify-center gap-4 hover:scale-95 transition-transform cursor-pointer">
+<div class="w-16 h-16 bg-primary-fixed flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="local_bar">local_bar</span>
+</div>
+<div class="text-center">
+<p class="font-headline font-bold text-xl">Glass</p>
+<p class="text-on-surface-variant font-label text-sm">250ml</p>
+</div>
+</div>
+<!-- Bottle Container Card -->
+<div class="md:col-span-1 bg-surface-container-lowest p-8 rounded-lg flex flex-col items-center justify-center gap-4 hover:scale-95 transition-transform cursor-pointer">
+<div class="w-16 h-16 bg-secondary-fixed flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="water_full">water_full</span>
+</div>
+<div class="text-center">
+<p class="font-headline font-bold text-xl">Bottle</p>
+<p class="text-on-surface-variant font-label text-sm">500ml</p>
+</div>
+</div>
+<!-- Mug Container Card -->
+<div class="md:col-span-1 bg-surface-container-lowest p-8 rounded-lg flex flex-col items-center justify-center gap-4 hover:scale-95 transition-transform cursor-pointer">
+<div class="w-16 h-16 bg-surface-container-high flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl" data-icon="coffee">coffee</span>
+</div>
+<div class="text-center">
+<p class="font-headline font-bold text-xl">Mug</p>
+<p class="text-on-surface-variant font-label text-sm">350ml</p>
+</div>
+</div>
+<!-- Thermos Container Card -->
+<div class="md:col-span-1 bg-surface-container-lowest p-8 rounded-lg flex flex-col items-center justify-center gap-4 hover:scale-95 transition-transform cursor-pointer">
+<div class="w-16 h-16 bg-tertiary-fixed flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="vaping_rooms">vaping_rooms</span>
+</div>
+<div class="text-center">
+<p class="font-headline font-bold text-xl">Thermos</p>
+<p class="text-on-surface-variant font-label text-sm">750ml</p>
+</div>
+</div>
+</div>
+<!-- Custom Entry Section -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<!-- Custom Input Card -->
+<div class="bg-surface-container-lowest p-10 rounded-xl relative overflow-hidden">
+<div class="absolute -right-12 -top-12 w-48 h-48 signature-gradient opacity-10 rounded-full blur-3xl"></div>
+<h3 class="font-headline font-bold text-2xl mb-8">Custom Entry</h3>
+<div class="space-y-6">
+<div>
+<label class="block text-sm font-label text-on-surface-variant mb-2 ml-1">Volume (ml)</label>
+<input class="w-full bg-surface-container-highest border-none rounded-full px-6 py-4 text-2xl font-headline font-bold focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all placeholder:text-outline-variant" placeholder="400" type="number"/>
+</div>
+<div class="flex gap-4">
+<button class="flex-1 signature-gradient text-on-primary font-headline font-bold py-4 rounded-full flex items-center justify-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                            Log Entry
+                        </button>
+</div>
+</div>
+</div>
+<!-- Visual Feedback Card (Editorial style) -->
+<div class="relative h-full min-h-[300px] bg-primary-container/5 rounded-xl flex flex-col items-center justify-center p-8 text-center overflow-hidden">
+<div class="absolute inset-0 z-0 opacity-20 hydration-wave signature-gradient h-full w-full"></div>
+<div class="relative z-10">
+<p class="font-headline text-8xl font-black text-primary/20 tracking-tighter mb-2">85%</p>
+<h4 class="font-headline font-bold text-2xl text-on-surface mb-2">Vital Goal</h4>
+<p class="text-on-surface-variant max-w-[200px] mx-auto">You're only 450ml away from your daily sanctuary of health.</p>
+</div>
+<img class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30 grayscale pointer-events-none" data-alt="abstract macro photography of clean water ripples with light blue tones and cinematic soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_UD5mZLllX_hbb6mxbz5qmaGQsLyizANfVeF0e-7SJDSEc_C0GzUq7hvf_4CCEC2thBON7glHu-VvyeXbO2ZBj3qfAE_DPjJNkcRq9E5L0iMZdKpdLGcKIuW1ynvJ7lv3I-w_ZFfYVy1QkFmabx8vbZXyyiSU8hPeAOgqpNuLESxr-dhaOKRs8AbBUp6jSVLSZRSVxS2Xd41jXw35Pr9hc5eddL1_k1N_ZfKtioE-LmXWcsoYKeNd6MdL8RaMwPF7CA0yie4S9ss"/>
+</div>
+</section>
+<!-- Recent Logs (Clean/No-Line List) -->
+<section class="mt-16">
+<div class="flex justify-between items-end mb-8">
+<h3 class="font-headline font-bold text-2xl">Recent Hydration</h3>
+<button class="text-primary font-bold text-sm hover:underline">View History</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-6 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="water_drop">water_drop</span>
+</div>
+<div>
+<p class="font-bold">Natural Spring Water</p>
+<p class="text-xs text-on-surface-variant font-label">10:45 AM • Glass</p>
+</div>
+</div>
+<p class="font-headline font-bold text-primary">250ml</p>
+</div>
+<div class="flex items-center justify-between p-6 bg-surface-container-low rounded-lg">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="coffee">coffee</span>
+</div>
+<div>
+<p class="font-bold">Green Tea</p>
+<p class="text-xs text-on-surface-variant font-label">08:15 AM • Mug</p>
+</div>
+</div>
+<p class="font-headline font-bold text-secondary">350ml</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar Shell -->
+<nav class="fixed bottom-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#f7f9fb]/70 backdrop-blur-xl rounded-t-[2rem] shadow-[0_-8px_24px_rgba(0,0,0,0.04)] z-50">
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="dashboard">dashboard</span>
+<span class="font-['Manrope'] font-medium text-[11px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-blue-100/50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-[24px] px-5 py-2 transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="water_drop" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+<span class="font-['Manrope'] font-medium text-[11px]">Log</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="notifications">notifications</span>
+<span class="font-['Manrope'] font-medium text-[11px]">Reminders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-5 py-2 hover:text-blue-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="history_toggle_off">history_toggle_off</span>
+<span class="font-['Manrope'] font-medium text-[11px]">History</span>
+</a>
+</nav>
+</body></html>

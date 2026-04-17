@@ -1,0 +1,52 @@
+# ─── Node ───────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─── Expo ────────────────────────────────────────────
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# ─── EAS Build ───────────────────────────────────────
+android/
+ios/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# ─── Native (if ejected) ─────────────────────────────
+*.orig.*
+*.haste_cache/
+
+# ─── Environment & Secrets ───────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── OS & Editor ─────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ─── Logs ────────────────────────────────────────────
+logs/
+*.log
+
+# ─── Drizzle / DB ────────────────────────────────────
+*.db
+*.db-shm
+*.db-wal
+drizzle/
+
+# ─── TypeScript ──────────────────────────────────────
+*.tsbuildinfo
