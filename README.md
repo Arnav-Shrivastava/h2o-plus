@@ -119,8 +119,8 @@ npx expo start
 
 - [x] UI/UX Design & Mockups
 - [x] Design system documentation (Vital Flow)
-- [ ] Project scaffold (Expo + NativeWind)
-- [ ] SQLite schema + Drizzle ORM setup
+- [x] Project scaffold (Expo + NativeWind)
+- [x] SQLite schema + Drizzle ORM setup
 - [ ] Dashboard screen
 - [ ] Log Water screen
 - [ ] Reminder Settings screen + notification scheduler

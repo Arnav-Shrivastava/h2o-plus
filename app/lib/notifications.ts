@@ -7,6 +7,8 @@ import { format, parse, setHours, setMinutes, isWeekend, addMinutes, isAfter, is
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
   }),

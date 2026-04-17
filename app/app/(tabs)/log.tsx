@@ -28,6 +28,7 @@ function formatTime(isoString: string) {
 export default function LogScreen() {
   const [selected, setSelected] = useState<string | null>(null);
   const [custom, setCustom] = useState("");
+  const { todaysLogs, logWater } = useHydrationStore();
 
   const selectedVessel = VESSELS.find((v) => v.id === selected);
 

@@ -3,8 +3,8 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { runMigrations } from "../../db/client";
-import { useHydrationStore } from "../../stores/hydration";
+import { runMigrations } from "../db/client";
+import { useHydrationStore } from "../stores/hydration";
 import { requestNotificationPermissions } from "../lib/notifications";
 
 SplashScreen.preventAutoHideAsync();
