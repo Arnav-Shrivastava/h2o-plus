@@ -4,6 +4,8 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { runMigrations } from "../../db/client";
+import { useHydrationStore } from "../../stores/hydration";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -13,6 +15,12 @@ export default function RootLayout() {
     PlusJakartaSans: require("../assets/fonts/SpaceMono-Regular.ttf"), // placeholder until custom fonts added
     Manrope: require("../assets/fonts/SpaceMono-Regular.ttf"),         // placeholder
   });
+
+  // Run migrations and init store
+  useEffect(() => {
+    runMigrations();
+    useHydrationStore.getState().initialize();
+  }, []);
 
   useEffect(() => {
     if (loaded) SplashScreen.hideAsync();

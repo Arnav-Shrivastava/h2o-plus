@@ -11,13 +11,34 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
 
+import { useState, useEffect } from "react";
+import { useHydrationStore } from "../../stores/hydration";
+
 const FREQUENCIES = ["Every 30m", "Every Hour", "Every 2h", "Custom"];
 
 export default function RemindersScreen() {
-  const [activeFreq, setActiveFreq] = useState("Every 30m");
+  const { settings, updateSettings } = useHydrationStore();
+  const [activeFreq, setActiveFreq] = useState("Every Hour");
   const [smartReminders, setSmartReminders] = useState(true);
   const [weekendMode, setWeekendMode] = useState(false);
-  const [goalMl] = useState(2800);
+  const [goalMl, setGoalMl] = useState(2500);
+
+  // Sync with DB
+  useEffect(() => {
+    if (settings) {
+      setGoalMl(settings.dailyGoalMl);
+      setSmartReminders(settings.smartReminders);
+      setWeekendMode(settings.weekendMode);
+      if (settings.reminderFrequencyMinutes === 30) setActiveFreq("Every 30m");
+      else if (settings.reminderFrequencyMinutes === 60) setActiveFreq("Every Hour");
+      else if (settings.reminderFrequencyMinutes === 120) setActiveFreq("Every 2h");
+      else setActiveFreq("Custom");
+    }
+  }, [settings]);
+
+  // Provide defaults for UI rendering if loading
+  const wakeTime = settings?.wakeTime || "07:30";
+  const windDownTime = settings?.windDownTime || "22:00";
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
@@ -79,7 +100,7 @@ export default function RemindersScreen() {
               First reminder
             </Text>
             <View className="bg-surface-container-lowest rounded-2xl px-4 py-3 flex-row items-center justify-between">
-              <Text className="text-xl font-bold text-on-surface" style={{ fontFamily: "PlusJakartaSans" }}>07:30</Text>
+              <Text className="text-xl font-bold text-on-surface" style={{ fontFamily: "PlusJakartaSans" }}>{wakeTime.split(":")[0]}:{wakeTime.split(":")[1]}</Text>
               <Text className="text-primary text-xs font-bold uppercase" style={{ fontFamily: "Manrope" }}>AM</Text>
             </View>
           </View>
@@ -93,7 +114,7 @@ export default function RemindersScreen() {
               Last reminder
             </Text>
             <View className="bg-surface-container-lowest rounded-2xl px-4 py-3 flex-row items-center justify-between">
-              <Text className="text-xl font-bold text-on-surface" style={{ fontFamily: "PlusJakartaSans" }}>10:00</Text>
+              <Text className="text-xl font-bold text-on-surface" style={{ fontFamily: "PlusJakartaSans" }}>{windDownTime.split(":")[0]}:{windDownTime.split(":")[1]}</Text>
               <Text className="text-tertiary text-xs font-bold uppercase" style={{ fontFamily: "Manrope" }}>PM</Text>
             </View>
           </View>
@@ -178,7 +199,18 @@ export default function RemindersScreen() {
         </View>
 
         {/* ─ Save Button ─ */}
-        <TouchableOpacity activeOpacity={0.85}>
+        <TouchableOpacity activeOpacity={0.85} onPress={() => {
+          let mins = 60;
+          if (activeFreq === "Every 30m") mins = 30;
+          if (activeFreq === "Every 2h") mins = 120;
+          
+          updateSettings({
+            dailyGoalMl: goalMl,
+            smartReminders,
+            weekendMode,
+            reminderFrequencyMinutes: mins
+          });
+        }}>
           <LinearGradient
             colors={["#0058bf", "#006fef"]}
             start={{ x: 0, y: 0 }}

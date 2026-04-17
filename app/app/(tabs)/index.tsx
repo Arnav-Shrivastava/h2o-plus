@@ -3,6 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Circle, Defs, LinearGradient as SVGGradient, Stop } from "react-native-svg";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useHydrationStore } from "../../stores/hydration";
 
 // ─── Circular Hydration Ring ─────────────────────────────────────────────────
 function HydrationRing({ current, goal }: { current: number; goal: number }) {
@@ -58,21 +59,24 @@ function HydrationRing({ current, goal }: { current: number; goal: number }) {
 }
 
 // ─── Quick Add Button ─────────────────────────────────────────────────────────
-function QuickAddBtn({ label, sub, primary }: { label: string; sub: string; primary?: boolean }) {
+function QuickAddBtn({ label, sub, primary, onPress }: { label: string; sub: string; primary?: boolean; onPress: () => void }) {
   return primary ? (
-    <LinearGradient
-      colors={["#0058bf", "#006fef"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={{ flex: 1, borderRadius: 16, padding: 20, alignItems: "center", gap: 6 }}
-    >
-      <MaterialCommunityIcons name="cup-water" size={28} color="#fff" />
-      <Text className="text-white font-bold text-base" style={{ fontFamily: "PlusJakartaSans" }}>{label}</Text>
-      <Text className="text-white/70 text-xs" style={{ fontFamily: "Manrope" }}>{sub}</Text>
-    </LinearGradient>
+    <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={{ flex: 1 }}>
+      <LinearGradient
+        colors={["#0058bf", "#006fef"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{ borderRadius: 16, padding: 20, alignItems: "center", gap: 6 }}
+      >
+        <MaterialCommunityIcons name="cup-water" size={28} color="#fff" />
+        <Text className="text-white font-bold text-base" style={{ fontFamily: "PlusJakartaSans" }}>{label}</Text>
+        <Text className="text-white/70 text-xs" style={{ fontFamily: "Manrope" }}>{sub}</Text>
+      </LinearGradient>
+    </TouchableOpacity>
   ) : (
     <TouchableOpacity
       activeOpacity={0.8}
+      onPress={onPress}
       style={{ flex: 1, backgroundColor: "#56f5f8", borderRadius: 16, padding: 20, alignItems: "center", gap: 6 }}
     >
       <MaterialCommunityIcons name="bottle-soda" size={28} color="#004f51" />
@@ -84,9 +88,18 @@ function QuickAddBtn({ label, sub, primary }: { label: string; sub: string; prim
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
 export default function DashboardScreen() {
-  const current = 1200;
-  const goal = 2500;
-  const streak = 12;
+  const { todaysTotalMl, settings, streak, todaysLogs, logWater } = useHydrationStore();
+  const goal = settings?.dailyGoalMl || 2500;
+  
+  // Calculate time since last drink
+  const lastLog = todaysLogs.length > 0 ? todaysLogs[0] : null;
+  let timeSinceLastDrink = "No logs today";
+  
+  if (lastLog) {
+    const diffMins = Math.floor((new Date().getTime() - new Date(lastLog.loggedAt).getTime()) / 60000);
+    if (diffMins < 60) timeSinceLastDrink = `${diffMins} mins ago`;
+    else timeSinceLastDrink = `${Math.floor(diffMins / 60)} hrs ${diffMins % 60} mins ago`;
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
@@ -114,11 +127,11 @@ export default function DashboardScreen() {
             style={{ fontFamily: "Manrope" }}>
             Daily Progress
           </Text>
-          <HydrationRing current={current} goal={goal} />
+          <HydrationRing current={todaysTotalMl} goal={goal} />
           <View className="flex-row items-center gap-2 bg-surface-container-low rounded-full px-5 py-2.5 mt-6">
             <MaterialCommunityIcons name="clock-outline" size={14} color="#0058bf" />
             <Text className="text-sm text-on-surface" style={{ fontFamily: "Manrope", fontWeight: "500" }}>
-              Last drink: <Text className="text-primary font-bold">45 mins ago</Text>
+              Last drink: <Text className="text-primary font-bold">{timeSinceLastDrink}</Text>
             </Text>
           </View>
         </View>
@@ -129,8 +142,8 @@ export default function DashboardScreen() {
             Quick Refresh
           </Text>
           <View className="flex-row gap-3">
-            <QuickAddBtn label="+250ml" sub="Glass" primary />
-            <QuickAddBtn label="+500ml" sub="Bottle" />
+            <QuickAddBtn label="+250ml" sub="Glass" primary onPress={() => logWater(250, "glass")} />
+            <QuickAddBtn label="+500ml" sub="Bottle" onPress={() => logWater(500, "bottle")} />
           </View>
           <TouchableOpacity className="mt-3 py-4 bg-surface-container-high rounded-2xl items-center">
             <Text className="text-on-surface-variant font-bold" style={{ fontFamily: "PlusJakartaSans" }}>

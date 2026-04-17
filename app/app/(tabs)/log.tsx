@@ -10,6 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
+import { useHydrationStore } from "../../stores/hydration";
 
 // ─── Vessel data ──────────────────────────────────────────────────────────────
 const VESSELS = [
@@ -19,11 +20,10 @@ const VESSELS = [
   { id: "thermos", label: "Thermos", ml: 750,  icon: "thermos",     bg: "#e0e0ff", iconColor: "#4f54a3" },
 ] as const;
 
-// ─── Recent log data ──────────────────────────────────────────────────────────
-const RECENT = [
-  { label: "Natural Spring Water", time: "10:45 AM", vessel: "Glass",  ml: 250, icon: "water",  color: "#0058bf" },
-  { label: "Green Tea",            time: "08:15 AM", vessel: "Mug",    ml: 350, icon: "coffee", color: "#00696b" },
-];
+function formatTime(isoString: string) {
+  const d = new Date(isoString);
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
 
 export default function LogScreen() {
   const [selected, setSelected] = useState<string | null>(null);
@@ -117,7 +117,18 @@ export default function LogScreen() {
               marginBottom: 16,
             }}
           />
-          <TouchableOpacity activeOpacity={0.85}>
+          <TouchableOpacity activeOpacity={0.85} onPress={() => {
+            if (selectedVessel) {
+              logWater(selectedVessel.ml, selectedVessel.id);
+              setSelected(null);
+            } else if (custom && !isNaN(Number(custom))) {
+               const num = Number(custom);
+               if(num > 0) {
+                 logWater(num, "custom");
+                 setCustom("");
+               }
+            }
+          }}>
             <LinearGradient
               colors={["#0058bf", "#006fef"]}
               start={{ x: 0, y: 0 }}
@@ -149,29 +160,38 @@ export default function LogScreen() {
             </TouchableOpacity>
           </View>
           <View style={{ gap: 10 }}>
-            {RECENT.map((item, i) => (
-              <View
-                key={i}
-                className="flex-row items-center justify-between p-4 bg-surface-container-low rounded-xl"
-              >
-                <View className="flex-row items-center gap-3">
-                  <View className="w-11 h-11 bg-white rounded-full items-center justify-center">
-                    <MaterialCommunityIcons name={item.icon as any} size={20} color={item.color} />
-                  </View>
-                  <View>
-                    <Text className="font-bold text-on-surface text-sm" style={{ fontFamily: "Manrope" }}>
-                      {item.label}
+            {todaysLogs.length === 0 ? (
+              <Text className="text-on-surface-variant text-center my-4" style={{ fontFamily: "Manrope" }}>
+                You haven't logged any water today yet.
+              </Text>
+            ) : (
+              todaysLogs.map((item) => {
+                const vesselInfo = VESSELS.find(v => v.id === item.vesselType) || VESSELS[0];
+                return (
+                  <View
+                    key={item.id}
+                    className="flex-row items-center justify-between p-4 bg-surface-container-low rounded-xl"
+                  >
+                    <View className="flex-row items-center gap-3">
+                      <View className="w-11 h-11 bg-white rounded-full items-center justify-center">
+                        <MaterialCommunityIcons name={vesselInfo.icon as any} size={20} color={vesselInfo.iconColor} />
+                      </View>
+                      <View>
+                        <Text className="font-bold text-on-surface text-sm" style={{ fontFamily: "Manrope" }}>
+                          Water
+                        </Text>
+                        <Text className="text-on-surface-variant text-xs" style={{ fontFamily: "Manrope" }}>
+                          {formatTime(item.loggedAt)} {item.vesselType ? `• ${vesselInfo.label}` : ''}
+                        </Text>
+                      </View>
+                    </View>
+                    <Text style={{ color: vesselInfo.iconColor, fontFamily: "PlusJakartaSans", fontWeight: "700", fontSize: 15 }}>
+                      {item.amountMl}ml
                     </Text>
-                    <Text className="text-on-surface-variant text-xs" style={{ fontFamily: "Manrope" }}>
-                      {item.time} • {item.vessel}
-                    </Text>
                   </View>
-                </View>
-                <Text style={{ color: item.color, fontFamily: "PlusJakartaSans", fontWeight: "700", fontSize: 15 }}>
-                  {item.ml}ml
-                </Text>
-              </View>
-            ))}
+                );
+              })
+            )}
           </View>
         </View>
       </ScrollView>
