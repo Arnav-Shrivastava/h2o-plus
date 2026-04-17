@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, StatusBar } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, StatusBar, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Circle, Defs, LinearGradient as SVGGradient, Stop } from "react-native-svg";
@@ -117,9 +117,6 @@ export default function DashboardScreen() {
               H2O+
             </Text>
           </View>
-          <TouchableOpacity className="w-10 h-10 rounded-full bg-surface-container-high items-center justify-center">
-            <MaterialCommunityIcons name="magnify" size={20} color="#414755" />
-          </TouchableOpacity>
         </View>
 
         {/* ─ Daily Progress Card ─ */}
@@ -158,23 +155,18 @@ export default function DashboardScreen() {
         </View>
 
         {/* ─ Streak Card ─ */}
-        <LinearGradient
-          colors={["#006fef", "#0058bf"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={{ borderRadius: 20, padding: 24, marginBottom: 16, overflow: "hidden" }}
-        >
+        <View style={{ backgroundColor: "#006fef", borderRadius: 20, padding: 24, marginBottom: 16, overflow: "hidden" }}>
           <View className="flex-row items-center justify-between mb-2">
-            <MaterialCommunityIcons name="fire" size={32} color="#56f5f8" />
-            <View style={{ backgroundColor: "rgba(255,255,255,0.15)", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 999 }}>
-              <Text style={{ color: "#fff", fontSize: 11, fontFamily: "Manrope", fontWeight: "700" }}>LVL 4</Text>
+            <MaterialCommunityIcons name="leaf" size={32} color="#fefcff" />
+            <View style={{ backgroundColor: "rgba(254, 252, 255, 0.2)", paddingHorizontal: 12, paddingVertical: 4, borderRadius: 999 }}>
+              <Text style={{ color: "#fefcff", fontSize: 11, fontFamily: "Manrope", fontWeight: "700" }}>LVL 4</Text>
             </View>
           </View>
-          <Text style={{ color: "#fff", fontSize: 22, fontFamily: "PlusJakartaSans", fontWeight: "800", marginBottom: 4 }}>
+          <Text style={{ color: "#fefcff", fontSize: 22, fontFamily: "PlusJakartaSans", fontWeight: "800", marginBottom: 4 }}>
             Vital Streak
           </Text>
-          <Text style={{ color: "rgba(255,255,255,0.75)", fontSize: 13, fontFamily: "Manrope", marginBottom: 16 }}>
-            {streak} days in a row! Keep flowing.
+          <Text style={{ color: "rgba(254, 252, 255, 0.8)", fontSize: 13, fontFamily: "Manrope", marginBottom: 16 }}>
+            You've hit your goal {streak} days in a row! Keep flowing.
           </Text>
           <View className="flex-row gap-2 items-end">
             {[60, 60, 60, 80, 100, 100, 45].map((h, i) => (
@@ -183,13 +175,53 @@ export default function DashboardScreen() {
                 style={{
                   flex: 1,
                   height: h * 0.5,
-                  backgroundColor: i >= 3 ? "#56f5f8" : "rgba(255,255,255,0.25)",
+                  backgroundColor: i >= 3 ? "#5af8fb" : "rgba(254, 252, 255, 0.3)",
                   borderRadius: 999,
                 }}
               />
             ))}
           </View>
-        </LinearGradient>
+        </View>
+
+        {/* ─ Insights Grid ─ */}
+        <View className="flex-row gap-4 mb-4">
+          <View className="flex-1 bg-surface-container-high rounded-xl p-5 justify-between">
+            <View>
+              <MaterialCommunityIcons name="lightbulb-on" size={20} color="#0058bf" style={{ marginBottom: 16 }} />
+              <Text className="font-bold text-on-surface mb-2" style={{ fontFamily: "PlusJakartaSans", fontSize: 16 }}>Pro Tip: Morning Flush</Text>
+              <Text className="text-on-surface-variant text-xs leading-relaxed" style={{ fontFamily: "Manrope" }}>Drinking 500ml of water immediately after waking up boosts metabolism by 24% for the next 90 minutes.</Text>
+            </View>
+            <View className="mt-6 rounded-lg overflow-hidden h-32 relative">
+              <Image source={{ uri: "https://lh3.googleusercontent.com/aida-public/AB6AXuB61rzZdYG5BziB_DiGLjvT_xwNe0yx3ZUQF7jggWYHbeVXSwoYIWRwij1Cd5jM-xerwsdPWwnClohiJM7ivjhnl6oGOug5XI5_Ry1WpbIbvUOs7u1UxgFau0qnDV4iPnObKoJAmARHTZe_cz2JSpwh_91IGzGt9RNEHzkCN30vv0RPyp0dd0shn8ktkPUfSDPsUoakSNPmlgXg1NJuCFLoMnDTeQ0-mzRfrT97CcRCBXeVC5mdGunSWymKz8ZnzpIOOu9HFKXOdYo" }} style={{ width: "100%", height: "100%" }} />
+              <View className="absolute inset-0 bg-black/20" />
+            </View>
+          </View>
+        </View>
+
+        <View className="bg-surface-container-lowest rounded-xl p-5 flex-row items-center gap-4 mb-4">
+          <View className="w-12 h-12 rounded-full bg-secondary-container items-center justify-center">
+            <MaterialCommunityIcons name="weather-sunny" size={22} color="#006e70" />
+          </View>
+          <View className="flex-1">
+            <Text className="font-bold text-sm text-on-surface" style={{ fontFamily: "PlusJakartaSans" }}>Climate Adjustment</Text>
+            <Text className="text-on-surface-variant text-xs mt-1" style={{ fontFamily: "Manrope" }}>It's 28°C. Goal increased by 300ml.</Text>
+          </View>
+        </View>
+
+        {/* Mini Flow History */}
+        <View className="bg-surface-container-lowest rounded-xl p-6 mb-4">
+          <View className="flex-row justify-between items-center mb-6">
+            <Text className="font-bold text-xl text-on-surface" style={{ fontFamily: "PlusJakartaSans" }}>Flow History</Text>
+            <TouchableOpacity onPress={() => router.push("/history")}>
+              <Text className="text-primary font-bold text-sm" style={{ fontFamily: "PlusJakartaSans" }}>View Full</Text>
+            </TouchableOpacity>
+          </View>
+          <View className="flex-row items-end justify-between h-24 gap-2">
+            {[40, 85, 40, 70, 95, 50, 45].map((val, i) => (
+              <View key={i} className="flex-1 rounded-t-full" style={{ height: `${val}%`, backgroundColor: i === 6 ? "#006fef" : i === 5 ? "rgba(0, 88, 191, 0.4)" : "#e6e8ea" }} />
+            ))}
+          </View>
+        </View>
 
         {/* ─ Next Reminder ─ */}
         <View className="bg-surface-container-lowest rounded-xl p-5 flex-row items-center gap-4">

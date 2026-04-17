@@ -29,7 +29,7 @@ function formatTime(isoString: string) {
 export default function LogScreen() {
   const [selected, setSelected] = useState<string | null>(null);
   const [custom, setCustom] = useState("");
-  const { todaysLogs, logWater } = useHydrationStore();
+  const { todaysLogs, logWater, settings, todaysTotalMl } = useHydrationStore();
 
   const selectedVessel = VESSELS.find((v) => v.id === selected);
 
@@ -48,8 +48,8 @@ export default function LogScreen() {
           >
             Log Water
           </Text>
-          <Text className="text-on-surface-variant text-base mt-1" style={{ fontFamily: "Manrope" }}>
-            Choose a vessel or enter a custom amount.
+          <Text className="text-on-surface-variant text-base mt-1 leading-relaxed" style={{ fontFamily: "Manrope" }}>
+            Stay in your flow. Choose a vessel or enter a custom amount to record your hydration.
           </Text>
         </View>
 
@@ -147,6 +147,22 @@ export default function LogScreen() {
               </Text>
             </LinearGradient>
           </TouchableOpacity>
+        </View>
+
+        {/* ─ Visual Feedback Card (editorial style) ─ */}
+        <View className="mb-8 relative min-h-[220px] bg-primary-container/10 rounded-xl flex-col items-center justify-center p-8 overflow-hidden border border-primary/5">
+          <View className="absolute -top-10 -right-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl"></View>
+          <View className="absolute -bottom-10 -left-10 w-40 h-40 bg-secondary/10 rounded-full blur-3xl"></View>
+          
+          <Text style={{ fontFamily: "PlusJakartaSans", fontSize: 72, fontWeight: "900", color: "rgba(0, 88, 191, 0.1)", marginBottom: -10, letterSpacing: -2 }}>
+            {settings?.dailyGoalMl ? Math.round((todaysTotalMl / settings.dailyGoalMl) * 100) : 0}%
+          </Text>
+          <Text style={{ fontFamily: "PlusJakartaSans", fontWeight: "800", fontSize: 24, color: "#191c1e", marginBottom: 8 }}>
+            Vital Goal
+          </Text>
+          <Text style={{ fontFamily: "Manrope", color: "#414755", textAlign: "center", fontSize: 13, lineHeight: 20 }}>
+            You're only <Text style={{ fontWeight: "700", color: "#0058bf" }}>{Math.max((settings?.dailyGoalMl || 2500) - todaysTotalMl, 0)}ml</Text> away from your daily sanctuary of health.
+          </Text>
         </View>
 
         {/* ─ Recent Logs ─ */}
