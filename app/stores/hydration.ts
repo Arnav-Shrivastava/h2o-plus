@@ -2,13 +2,14 @@ import { create } from "zustand";
 import { db } from "../db/client";
 import { waterLogs, userSettings, WaterLog, UserSettings } from "../db/schema";
 import { eq, sql, gte, and, desc, sum } from "drizzle-orm";
+import { rescheduleNotifications } from "../lib/notifications";
 
 interface HydrationState {
   // Data
   todaysLogs: WaterLog[];
   todaysTotalMl: number;
   settings: UserSettings | null;
-  history: { day: string; date: number; total: number; goal: number; met: boolean }[];
+  history: { day: string; fullDay: string; date: number; total: number; goal: number; met: boolean }[];
   streak: number;
   
   // Loading states
@@ -45,14 +46,51 @@ export const useHydrationStore = create<HydrationState>((set, get) => ({
       // Calculate total
       const totalMl = logs.reduce((sum, log) => sum + log.amountMl, 0);
 
-      // (Later: 3. Calculate history and streak from previous days)
+      // 3. Calculate history and streak from previous days
+      const last7DaysStrings = Array.from({ length: 7 }).map((_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        return d.toISOString().split("T")[0];
+      });
+
+      const historyLogs = await db
+        .select()
+        .from(waterLogs)
+        .where(gte(waterLogs.loggedAt, last7DaysStrings[6] + "T00:00:00Z"));
+
+      const history = last7DaysStrings.reverse().map(dateStr => {
+        const dayLogs = historyLogs.filter(l => l.loggedAt.startsWith(dateStr));
+        const total = dayLogs.reduce((sum, l) => sum + l.amountMl, 0);
+        const dayDate = new Date(dateStr);
+        const dayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayDate.getDay()];
+        return {
+          day: dayName[0], // "M", "T" etc
+          fullDay: dayName, // "Mon", "Tue" etc
+          date: dayDate.getDate(),
+          total,
+          goal: currentSettings.dailyGoalMl,
+          met: total >= currentSettings.dailyGoalMl
+        };
+      });
+
+      // Simple streak calculation (going backwards from yesterday)
+      let currentStreak = totalMl >= currentSettings.dailyGoalMl ? 1 : 0;
+      for (let i = 5; i >= 0; i--) { // Check the last 6 days before today
+        if (history[i].met) currentStreak++;
+        else break;
+      }
 
       set({
         settings: currentSettings,
         todaysLogs: logs,
         todaysTotalMl: totalMl,
+        history,
+        streak: currentStreak,
         isLoading: false,
       });
+
+      // 4. Reschedule local notifications based on current goal progress
+      await rescheduleNotifications(currentSettings, totalMl);
     } catch (e) {
       console.error("Failed to initialize store", e);
       set({ isLoading: false });

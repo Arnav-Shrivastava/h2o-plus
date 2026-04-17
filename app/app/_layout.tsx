@@ -1,11 +1,11 @@
 import "../global.css";
-
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { runMigrations } from "../../db/client";
 import { useHydrationStore } from "../../stores/hydration";
+import { requestNotificationPermissions } from "../lib/notifications";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -18,8 +18,12 @@ export default function RootLayout() {
 
   // Run migrations and init store
   useEffect(() => {
-    runMigrations();
-    useHydrationStore.getState().initialize();
+    async function setupApp() {
+      runMigrations();
+      await requestNotificationPermissions();
+      await useHydrationStore.getState().initialize();
+    }
+    setupApp();
   }, []);
 
   useEffect(() => {
