@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Switch,
   StatusBar,
+  TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -20,6 +21,7 @@ export default function RemindersScreen() {
   const [smartReminders, setSmartReminders] = useState(true);
   const [weekendMode, setWeekendMode] = useState(false);
   const [goalMl, setGoalMl] = useState(2500);
+  const [customMins, setCustomMins] = useState("90");
 
   // Sync with DB
   useEffect(() => {
@@ -30,7 +32,10 @@ export default function RemindersScreen() {
       if (settings.reminderFrequencyMinutes === 30) setActiveFreq("Every 30m");
       else if (settings.reminderFrequencyMinutes === 60) setActiveFreq("Every Hour");
       else if (settings.reminderFrequencyMinutes === 120) setActiveFreq("Every 2h");
-      else setActiveFreq("Custom");
+      else {
+        setActiveFreq("Custom");
+        setCustomMins(settings.reminderFrequencyMinutes.toString());
+      }
     }
   }, [settings]);
 
@@ -63,16 +68,32 @@ export default function RemindersScreen() {
           <Text className="text-xs text-on-surface-variant font-bold uppercase tracking-widest mb-4" style={{ fontFamily: "Manrope" }}>
             Daily Hydration Goal
           </Text>
-          <View className="flex-row items-baseline gap-1 mb-5">
-            <Text className="text-5xl font-black text-primary" style={{ fontFamily: "PlusJakartaSans" }}>
-              {goalMl.toLocaleString()}
-            </Text>
-            <Text className="text-lg font-bold text-on-surface-variant" style={{ fontFamily: "PlusJakartaSans" }}>
-              ml
-            </Text>
+          <View className="flex-row items-center justify-between mb-5">
+            <TouchableOpacity 
+              className="w-12 h-12 rounded-full bg-surface-container-high items-center justify-center"
+              onPress={() => setGoalMl(Math.max(1000, goalMl - 100))}
+            >
+              <MaterialCommunityIcons name="minus" size={24} color="#0058bf" />
+            </TouchableOpacity>
+            
+            <View className="flex-row items-baseline gap-1">
+              <Text className="text-5xl font-black text-primary" style={{ fontFamily: "PlusJakartaSans" }}>
+                {goalMl.toLocaleString()}
+              </Text>
+              <Text className="text-lg font-bold text-on-surface-variant" style={{ fontFamily: "PlusJakartaSans" }}>
+                ml
+              </Text>
+            </View>
+
+            <TouchableOpacity 
+              className="w-12 h-12 rounded-full bg-surface-container-high items-center justify-center"
+              onPress={() => setGoalMl(Math.min(6000, goalMl + 100))}
+            >
+              <MaterialCommunityIcons name="plus" size={24} color="#0058bf" />
+            </TouchableOpacity>
           </View>
-          {/* Slider track (visual only for now) */}
-          <View className="w-full h-3 bg-surface-container-high rounded-full mb-2 overflow-hidden">
+          {/* Progress bar visual */}
+          <View className="w-full h-3 bg-surface-container-high rounded-full overflow-hidden mt-2">
             <LinearGradient
               colors={["#0058bf", "#006fef"]}
               start={{ x: 0, y: 0 }}
@@ -150,6 +171,17 @@ export default function RemindersScreen() {
               );
             })}
           </View>
+          {activeFreq === "Custom" && (
+            <View className="mt-4 flex-row items-center gap-3 bg-surface-container-highest rounded-xl px-5 py-3">
+              <TextInput
+                value={customMins}
+                onChangeText={setCustomMins}
+                keyboardType="numeric"
+                style={{ fontFamily: "PlusJakartaSans", fontSize: 17, fontWeight: "700", color: "#191c1e", minWidth: 50, borderBottomWidth: 2, borderBottomColor: "#0058bf", paddingBottom: 2 }}
+              />
+              <Text className="text-on-surface-variant font-bold text-sm" style={{ fontFamily: "Manrope" }}>minutes</Text>
+            </View>
+          )}
         </View>
 
         {/* ─ Smart Toggles ─ */}
@@ -201,6 +233,10 @@ export default function RemindersScreen() {
           let mins = 60;
           if (activeFreq === "Every 30m") mins = 30;
           if (activeFreq === "Every 2h") mins = 120;
+          if (activeFreq === "Custom") {
+            const parsed = parseInt(customMins);
+            if (!isNaN(parsed) && parsed > 0) mins = parsed;
+          }
           
           updateSettings({
             dailyGoalMl: goalMl,

@@ -7,10 +7,10 @@ import {
   StatusBar,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import { useHydrationStore } from "../../stores/hydration";
+import { router } from "expo-router";
 
 // ─── Vessel data ──────────────────────────────────────────────────────────────
 const VESSELS = [
@@ -154,7 +154,7 @@ export default function LogScreen() {
             <Text className="text-xl font-bold text-on-surface" style={{ fontFamily: "PlusJakartaSans" }}>
               Recent Hydration
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/history")}>
               <Text className="text-primary text-sm font-bold" style={{ fontFamily: "Manrope" }}>
                 View History
               </Text>

@@ -3,6 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Circle, Defs, LinearGradient as SVGGradient, Stop } from "react-native-svg";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { useHydrationStore } from "../../stores/hydration";
 
 // ─── Circular Hydration Ring ─────────────────────────────────────────────────
@@ -145,7 +146,11 @@ export default function DashboardScreen() {
             <QuickAddBtn label="+250ml" sub="Glass" primary onPress={() => logWater(250, "glass")} />
             <QuickAddBtn label="+500ml" sub="Bottle" onPress={() => logWater(500, "bottle")} />
           </View>
-          <TouchableOpacity className="mt-3 py-4 bg-surface-container-high rounded-2xl items-center">
+          <TouchableOpacity 
+            className="mt-3 py-4 bg-surface-container-high rounded-2xl items-center"
+            activeOpacity={0.8}
+            onPress={() => router.push("/log")}
+          >
             <Text className="text-on-surface-variant font-bold" style={{ fontFamily: "PlusJakartaSans" }}>
               Custom Amount
             </Text>
@@ -192,10 +197,16 @@ export default function DashboardScreen() {
             <MaterialCommunityIcons name="bell-ring" size={22} color="#070a61" />
           </View>
           <View className="flex-1">
-            <Text className="font-bold text-sm text-on-surface" style={{ fontFamily: "PlusJakartaSans" }}>Next Reminder</Text>
-            <Text className="text-on-surface-variant text-xs" style={{ fontFamily: "Manrope" }}>2:30 PM • 250ml suggested</Text>
+            <Text className="font-bold text-sm text-on-surface" style={{ fontFamily: "PlusJakartaSans" }}>Scheduled Flows</Text>
+            <Text className="text-on-surface-variant text-xs" style={{ fontFamily: "Manrope" }}>
+              {settings?.smartReminders && todaysTotalMl >= goal 
+                ? "Paused — daily goal reached! 🎉"
+                : "Reminders active & flowing."}
+            </Text>
           </View>
-          <MaterialCommunityIcons name="chevron-right" size={22} color="#0058bf" />
+          <TouchableOpacity onPress={() => router.push("/reminders")}>
+            <MaterialCommunityIcons name="pencil" size={22} color="#0058bf" />
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

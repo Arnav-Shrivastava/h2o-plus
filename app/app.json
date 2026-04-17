@@ -27,7 +27,8 @@
         "android.permission.RECEIVE_BOOT_COMPLETED",
         "android.permission.SCHEDULE_EXACT_ALARM",
         "android.permission.USE_EXACT_ALARM"
-      ]
+      ],
+      "package": "com.arnavshrivastava.h2oplus"
     },
     "web": {
       "bundler": "metro",
@@ -49,6 +50,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f9fa6661-24fb-4583-99ec-37776e25d4ea"
+      }
     }
   }
 }
