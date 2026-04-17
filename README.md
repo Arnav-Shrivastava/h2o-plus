@@ -121,12 +121,12 @@ npx expo start
 - [x] Design system documentation (Vital Flow)
 - [x] Project scaffold (Expo + NativeWind)
 - [x] SQLite schema + Drizzle ORM setup
-- [ ] Dashboard screen
-- [ ] Log Water screen
-- [ ] Reminder Settings screen + notification scheduler
-- [ ] Hydration History screen + charts
-- [ ] App icon + splash screen
-- [ ] EAS production build (`.apk`)
+- [x] Dashboard screen
+- [x] Log Water screen
+- [x] Reminder Settings screen + notification scheduler
+- [x] Hydration History screen + charts
+- [x] App icon + splash screen
+- [x] EAS production build (`.apk`)
 
 ---
 
